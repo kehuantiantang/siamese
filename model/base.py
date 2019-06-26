@@ -20,15 +20,16 @@ def get_model(input_shape, pre_train=False, backbone=None):
         from model.vgg19 import VGG19
         backbone_fun = VGG19
     elif backbone == 'resnet50':
-        from model.resnet50 import ResNet50
+        from model.resnet import ResNet50
         backbone_fun = ResNet50
+    elif backbone == 'resnet101':
+        from model.resnet import ResNet101
+        backbone_fun = ResNet101
     elif backbone == 'inceptionv2':
         from model.inception_resnet_v2 import InceptionResNetV2
         backbone_fun = InceptionResNetV2
     else:
         raise ValueError('{} is invalid'.format(backbone))
-
-    model_name = backbone
 
     if pre_train:
         weights = 'imagenet'
@@ -42,7 +43,8 @@ def get_model(input_shape, pre_train=False, backbone=None):
 
     x = top_layer([left_output, right_output])
 
-    model = Model(inputs=[left_input, right_input], outputs=x, name=model_name)
+    model = Model(inputs=[left_input, right_input], outputs=x,
+                  name=siamese.name)
 
     return model
 

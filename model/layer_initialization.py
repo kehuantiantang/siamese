@@ -19,6 +19,8 @@ def initialize_bias(shape, name=None):
     """
     return np.random.normal(loc=0.5, scale=1e-2, size=shape)
 
+def initialize_dense_weights(shape, dtype=None):
+    return np.random.normal(loc=0, scale=2e-2, size=shape)
 
 def Conv2D_Initialize(filters, kernel_size, **kwargs):
 
@@ -42,9 +44,11 @@ def Conv2D_Initialize(filters, kernel_size, **kwargs):
 
 def Dense_Initialize(units, **kwargs):
     bias_initializer = kwargs.pop('bias_initializer', initialize_bias)
-
+    kernel_initializer = kwargs.pop('kernel_initializer', initialize_dense_weights)
     def layer(x):
-        return Dense(units, bias_initializer=bias_initializer, **kwargs)(x)
+        # wider normal distribution, normalization distribution: 0, 0.2
+        return Dense(units, kernel_initializer = kernel_initializer,
+        bias_initializer=bias_initializer, **kwargs)(x)
 
     return layer
 
