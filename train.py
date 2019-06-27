@@ -9,6 +9,10 @@ import utill as ut
 from model import base as md
 from pathlib import Path
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0, 1, 2"
+
 save_path = Path('./save/')
 model_path = Path('./weights/')
 save_path.mkdir(parents=True, exist_ok=True)
@@ -29,18 +33,16 @@ n_val = 250  # how many one-shot tasks to validate on
 best = -1
 
 loss = -1
-lr = 6e-6
+lr = 6e-4
 input_shape = (105, 105, 1)
-backbone = 'resnet50'
+backbone = None
 is_train = True
 is_test = True
 
-checkpoint_path = None #
-'/home/khtt/code/siamese/weights/weights_resnet50_final.h5'
-
+checkpoint_path = None  # '/home/khtt/code/siamese/weights/resnet50_best.h5'
 
 model = md.get_model(input_shape, backbone=backbone, pre_train=True)
-gpu_model = multi_gpu_model(model, gpus=4)
+gpu_model = multi_gpu_model(model, gpus=3)
 gpu_model.name = model.name
 # gpu_model.summary()
 optimizer = SGD(lr=lr, momentum=0.9, nesterov=True)  # 0.00006
@@ -66,19 +68,20 @@ if is_train:
             ) - t_start) / 60.0))
 
         if i % evaluate_every == 0:
-            val_acc = ut.test_oneshot(gpu_model, N_way, n_val, Xval, val_classes,
-                                      verbose=True)
+            val_acc = ut.test_oneshot(gpu_model, N_way, n_val, Xval,
+                                      val_classes, verbose=True)
             if val_acc >= best:
                 print(
                     "\n ------------------ Current best: {0}, previous best: {1}".format(
                         val_acc, best))
                 best = val_acc
 
-                gpu_model.save(os.path.join(model_path, '{}_best.h5'.format(
+                gpu_model.save(os.path.join(model_path,
+                                            '{}_best_backbone.h5'.format(
                     gpu_model.name)))
 
     gpu_model.save(
-        os.path.join(model_path, '{}_final.h5'.format(gpu_model.name)))
+        os.path.join(model_path, '{}_final1_backbone.h5'.format(gpu_model.name)))
 
 if is_train:
     val_acc = ut.test_oneshot(gpu_model, N_way, n_val, Xval, val_classes,
@@ -86,4 +89,3 @@ if is_train:
     print("\n ------------------ Current best: {0}, previous best: {1}".format(
         val_acc, best))
     best = val_acc
-

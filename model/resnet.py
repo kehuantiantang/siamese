@@ -454,7 +454,7 @@ def ResNeXt50(input_shape=None,include_top=True,
         return x
     return ResNet(stack_fn, False, False, 'resnext50',
                   include_top, weights,
-                  input_tensor, input_shape,
+                   input_shape,
                   pooling, classes,
                   **kwargs)
 
@@ -473,7 +473,7 @@ def ResNeXt101(input_shape=None,include_top=True,
         return x
     return ResNet(stack_fn, False, False, 'resnext101',
                   include_top, weights,
-                  input_tensor, input_shape,
+                  input_shape,
                   pooling, classes,
                   **kwargs)
 

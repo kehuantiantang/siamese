@@ -56,7 +56,6 @@ def Dense_Initialize(units, **kwargs):
 def top_layer(x_list, final_activation='sigmoid'):
     L1_layer = Lambda(lambda tensors: K.abs(tensors[0] - tensors[1]))
     L1_distance = L1_layer(x_list)
-    print(L1_distance.shape)
     # Add a dense layer with a sigmoid unit to generate the similarity score
     prediction = Dense_Initialize(1, activation=final_activation,
                        name='siamese_prediction')(L1_distance)

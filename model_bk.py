@@ -59,7 +59,6 @@ def get_siamese_model(input_shape):
     # Add a customized layer to compute the absolute difference between the encodings
     L1_layer = Lambda(lambda tensors:K.abs(tensors[0] - tensors[1]))
     L1_distance = L1_layer([encoded_l, encoded_r])
-    print(L1_distance.shape)
     # Add a dense layer with a sigmoid unit to generate the similarity score
     prediction = Dense(1, activation='sigmoid', bias_initializer = initialize_bias)(L1_distance)
     
