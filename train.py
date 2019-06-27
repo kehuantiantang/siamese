@@ -35,8 +35,8 @@ backbone = 'resnet50'
 is_train = True
 is_test = True
 
-checkpoint_path = '/home/khtt/code/siamese/weights/weights_resnet50_best.h5'
-
+checkpoint_path = None #
+'/home/khtt/code/siamese/weights/weights_resnet50_final.h5'
 
 
 model = md.get_model(input_shape, backbone=backbone, pre_train=True)
@@ -74,11 +74,11 @@ if is_train:
                         val_acc, best))
                 best = val_acc
 
-                gpu_model.save(os.path.join(model_path, 'weights_{}_best.h5'.format(
+                gpu_model.save(os.path.join(model_path, '{}_best.h5'.format(
                     gpu_model.name)))
 
     gpu_model.save(
-        os.path.join(model_path, 'weights_{}_final.h5'.format(gpu_model.name)))
+        os.path.join(model_path, '{}_final.h5'.format(gpu_model.name)))
 
 if is_train:
     val_acc = ut.test_oneshot(gpu_model, N_way, n_val, Xval, val_classes,

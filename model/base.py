@@ -6,7 +6,7 @@ from model.base_siamese import base_middle_siamese
 from model.layer_initialization import top_layer
 
 
-def get_model(input_shape, pre_train=False, backbone=None):
+def get_model(input_shape, pre_train=False, backbone=None, verbose = False):
     left_input = Input(input_shape)
     right_input = Input(input_shape)
 
@@ -36,7 +36,8 @@ def get_model(input_shape, pre_train=False, backbone=None):
     else:
         weights = None
     siamese = backbone_fun(input_shape=input_shape, weights=weights)
-    siamese.summary()
+    if verbose:
+        siamese.summary()
 
     left_output = siamese(left_input)
     right_output = siamese(right_input)
