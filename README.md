@@ -6,3 +6,9 @@ Follow the paper siamese neural networks for one-show image Recognition
   - mobilenet
   - inception v3
   - vanllia
+
+- Dataset
+  - Omniglot
+  
+- Train, Test, K shot-learning
+  - Included
